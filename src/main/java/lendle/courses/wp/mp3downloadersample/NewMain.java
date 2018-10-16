@@ -28,7 +28,7 @@ import javax.swing.ProgressMonitor;
 public class NewMain {
 
     static Player p = null;
-    static ProgressMonitor progress=null;
+    static ProgressMonitor progress = null;
 
     private static void playFile(File tempFile) {
         progress.setProgress(100);
@@ -55,21 +55,25 @@ public class NewMain {
         frame.setLayout(new FlowLayout());
         JButton button1 = new JButton("Play Wav File");
         final double FILE_SIZE = 9580594d;
-        
+
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 try {
                     final File tempFile = File.createTempFile("tmp", ".wav");
                     progress = new ProgressMonitor(frame, "downloading......", "a2002011001-e02.wav", 0, 100);
-                    FileDownloader.downloadFile(new URL("http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02.wav"), 
+                    FileDownloader.downloadFile(new URL("http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02.wav"),
                             tempFile, new FileDownloaderCallback() {
                         @Override
                         public void totalBytesDownloaded(long bytes, boolean finished, boolean failed) {
-                           //implement this
-                           ////////////////
+                            //implement this
+                            double ratio = (bytes / FILE_SIZE) * 100;
+                            progress.setProgress((int) ratio);
+                            ////////////////
+                            if (finished) {
+                                playFile(tempFile);
+                            }
                         }
-                        protected double FILE_SIZE;
                     });
 
                 } catch (Exception ex) {
